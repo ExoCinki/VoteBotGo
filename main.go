@@ -9,45 +9,19 @@ import (
 	"time"
 
 	"github.com/gookit/ini/v2/dotnev"
-	"github.com/vbauerster/mpb/v7"
-	"github.com/vbauerster/mpb/v7/decor"
 )
 
 func main() {
+
 	vote()
 
-	duration := 3*time.Hour + 1*time.Minute
+	duration := 3*time.Hour + 1*time.Minute // PROD
+	//duration := 1 * time.Minute
 
-	loadingbar(duration)
 	c := time.Tick(duration)
 	for _ = range c {
-		loadingbar(duration)
 		vote()
 	}
-}
-
-func loadingbar(duration time.Duration) {
-
-	tickduration := time.Minute
-
-	p := mpb.New(mpb.WithWidth(64))
-	total := duration / tickduration
-	name := "Timer :"
-
-	bar := p.New(int64(total),
-		mpb.BarStyle().Lbound("╢").Filler("▌").Tip("▌").Padding("░").Rbound("╟"),
-		mpb.PrependDecorators(
-			decor.Name(name, decor.WC{W: len(name) + 1, C: decor.DidentRight}),
-		),
-		mpb.AppendDecorators(decor.Percentage()),
-	)
-
-	for i := 0; i < int(total); i++ {
-		time.Sleep(tickduration)
-		bar.Increment()
-	}
-
-	p.Wait()
 }
 
 func vote() {
@@ -73,6 +47,7 @@ func vote() {
 	client := &http.Client{Jar: jar} // Create the client.
 
 	res, err := client.Get("https://level-flyff.fr/") // Get the page index.
+
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -91,11 +66,20 @@ func vote() {
 		fmt.Println("Vous êtes connecté avec", dotnev.Get("USERNAME"), "!")
 	}
 
+	fmt.Println("Wating 5 seconds...")
+	time.Sleep(5 * time.Second) // Wait 5 seconds.
+	
+	fmt.Println("Accès to Vote Button !!")
+	fmt.Println("Wating 5 seconds...")
+	time.Sleep(5 * time.Second) // Wait 5 seconds.
+
 	dataVote := url.Values{"id": {"1"}}                                                 // Create the data.
 	res, err = client.PostForm("https://level-flyff.fr/ajax/recompenses.php", dataVote) // Get the page index.
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
+
 	fmt.Println("Vote effectué !")
+	fmt.Println("Heures du vote : " + time.Now().Format("02-01-2006 15:04:05"))
 }
