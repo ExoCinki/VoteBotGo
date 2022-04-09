@@ -6,6 +6,7 @@ require (
 	github.com/gookit/ini/v2 v2.0.11
 	github.com/vbauerster/mpb v3.4.0+incompatible
 	github.com/vbauerster/mpb/v7 v7.4.1
+	golang.org/x/net v0.0.0-20211112202133-69e39bad7dc2
 )
 
 require (
